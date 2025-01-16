@@ -18,8 +18,8 @@ var displayEmployees = function () {
     if (localStorage.getItem("payroll-employees")) {
         employees = JSON.parse(localStorage.getItem("payroll-employees"));
     }
-    var employeesHTML = employees.map(function (employees) {
-        return "\n      <li data-id=\"".concat(employees.id, "\">\n        <h3>").concat(employees.name, "</h3>\n        <input type=\"number\" class=\"salary\" min=\"0\" value=\"").concat(employees.salary, "\">\n        <button class=\"update-salary\">Update</button>\n        <p class=\"smallprint\">Current salary: ").concat(employees.salary, "</p>\n        ").concat(employees.contractEndDate ? 'renew <input class="renewContract" type="checkbox">' : '', "\n    \n      </li>\n    ");
+    var employeesHTML = employees.map(function (employee) {
+        return "\n      <li data-id=\"".concat(employee.id, "\">\n        <h3>").concat(employee.name, "</h3>\n        <input type=\"number\" class=\"salary\" min=\"0\" value=\"").concat(employee.salary, "\">\n        <button class=\"update-salary\">Update</button>\n        <p class=\"smallprint\">Current salary: ").concat(employee.salary, "</p>\n        ").concat(employee.contractEndDate ? "renew <input class=\"renewContract\" type=\"checkbox\" ".concat(employee.contractRenewalFlag ? 'checked' : '', ">") : '', "\n    \n      </li>\n    ");
     }).join("");
     empoyeeListEl.innerHTML = employeesHTML;
 };

@@ -32,14 +32,14 @@ const displayEmployees = () => {
     employees = JSON.parse(localStorage.getItem("payroll-employees")!);
   }
 
-  const employeesHTML = employees.map(employees => {
+  const employeesHTML = employees.map(employee => {
     return `
-      <li data-id="${employees.id}">
-        <h3>${employees.name}</h3>
-        <input type="number" class="salary" min="0" value="${employees.salary}">
+      <li data-id="${employee.id}">
+        <h3>${employee.name}</h3>
+        <input type="number" class="salary" min="0" value="${employee.salary}">
         <button class="update-salary">Update</button>
-        <p class="smallprint">Current salary: ${employees.salary}</p>
-        ${employees.contractEndDate ? 'renew <input class="renewContract" type="checkbox">' : ''}
+        <p class="smallprint">Current salary: ${employee.salary}</p>
+        ${employee.contractEndDate ? `renew <input class="renewContract" type="checkbox" ${employee.contractRenewalFlag ? 'checked' : ''}>` : ''}
     
       </li>
     `
