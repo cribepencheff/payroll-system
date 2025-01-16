@@ -26,19 +26,21 @@ if (!localStorage.getItem("payroll-employees")) {
   localStorage.setItem("payroll-employees", JSON.stringify(employees));
 }
 
-const displayEmpolyees = () => {
+const displayEmployees = () => {
 
   if (localStorage.getItem("payroll-employees")) {
     employees = JSON.parse(localStorage.getItem("payroll-employees")!);
   }
 
-  const employeesHTML = employees.map(empolyee => {
+  const employeesHTML = employees.map(employees => {
     return `
-      <li data-id="${empolyee.id}">
-        <h3>${empolyee.name}</h3>
-        <input type="number" class="salary" min="0" value="${empolyee.salary}">
+      <li data-id="${employees.id}">
+        <h3>${employees.name}</h3>
+        <input type="number" class="salary" min="0" value="${employees.salary}">
         <button class="update-salary">Update</button>
-        <p class="smallprint">Current salary: ${empolyee.salary}</p>
+        <p class="smallprint">Current salary: ${employees.salary}</p>
+        ${employees.contractEndDate ? 'renew <input class="renewContract" type="checkbox">' : ''}
+    
       </li>
     `
   }).join("");
@@ -58,12 +60,35 @@ empoyeeListEl.addEventListener("click", (e) => {
       if (foundEmployee) {
         foundEmployee.salary = parseInt(salaryInput.value);
         localStorage.setItem("payroll-employees", JSON.stringify(employees));
-        displayEmpolyees();
+        displayEmployees();
       }
+
     }
+  }
+  if (e.target instanceof HTMLElement && e.target.classList.contains("renewContract"))
+  {
+    
+    const employeeCheckBox = e.target as HTMLInputElement;
+    console.log("check:", employeeCheckBox.checked);
+
+  
+    
+      const employee = e.target.closest("li");
+      const employeeId = parseInt(employee?.dataset.id || "0");
+      const filteredEmployees = employees.filter(employee => employee.id === employeeId);
+      const foundEmployee = filteredEmployees.length > 0 ? filteredEmployees[0] : null;
+
+      if (foundEmployee) {
+        foundEmployee.contractRenewalFlag = employeeCheckBox.checked;
+
+        console.log(employees)
+        localStorage.setItem("payroll-employees", JSON.stringify(employees));
+        // displayEmployees();
+      }
+    
   }
 })
 
 // Init
-displayEmpolyees();
+displayEmployees();
 

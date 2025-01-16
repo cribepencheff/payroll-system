@@ -14,12 +14,12 @@ var empoyeeListEl = document.getElementById('employee-list');
 if (!localStorage.getItem("payroll-employees")) {
     localStorage.setItem("payroll-employees", JSON.stringify(employees));
 }
-var displayEmpolyees = function () {
+var displayEmployees = function () {
     if (localStorage.getItem("payroll-employees")) {
         employees = JSON.parse(localStorage.getItem("payroll-employees"));
     }
-    var employeesHTML = employees.map(function (empolyee) {
-        return "\n      <li data-id=\"".concat(empolyee.id, "\">\n        <h3>").concat(empolyee.name, "</h3>\n        <input type=\"number\" class=\"salary\" min=\"0\" value=\"").concat(empolyee.salary, "\">\n        <button class=\"update-salary\">Update</button>\n        <p class=\"smallprint\">Current salary: ").concat(empolyee.salary, "</p>\n      </li>\n    ");
+    var employeesHTML = employees.map(function (employees) {
+        return "\n      <li data-id=\"".concat(employees.id, "\">\n        <h3>").concat(employees.name, "</h3>\n        <input type=\"number\" class=\"salary\" min=\"0\" value=\"").concat(employees.salary, "\">\n        <button class=\"update-salary\">Update</button>\n        <p class=\"smallprint\">Current salary: ").concat(employees.salary, "</p>\n        ").concat(employees.contractEndDate ? 'renew <input class="renewContract" type="checkbox">' : '', "\n    \n      </li>\n    ");
     }).join("");
     empoyeeListEl.innerHTML = employeesHTML;
 };
@@ -34,10 +34,24 @@ empoyeeListEl.addEventListener("click", function (e) {
             if (foundEmployee) {
                 foundEmployee.salary = parseInt(salaryInput.value);
                 localStorage.setItem("payroll-employees", JSON.stringify(employees));
-                displayEmpolyees();
+                displayEmployees();
             }
+        }
+    }
+    if (e.target instanceof HTMLElement && e.target.classList.contains("renewContract")) {
+        var employeeCheckBox = e.target;
+        console.log("check:", employeeCheckBox.checked);
+        var employee = e.target.closest("li");
+        var employeeId_2 = parseInt((employee === null || employee === void 0 ? void 0 : employee.dataset.id) || "0");
+        var filteredEmployees = employees.filter(function (employee) { return employee.id === employeeId_2; });
+        var foundEmployee = filteredEmployees.length > 0 ? filteredEmployees[0] : null;
+        if (foundEmployee) {
+            foundEmployee.contractRenewalFlag = employeeCheckBox.checked;
+            console.log(employees);
+            localStorage.setItem("payroll-employees", JSON.stringify(employees));
+            // displayEmployees();
         }
     }
 });
 // Init
-displayEmpolyees();
+displayEmployees();
