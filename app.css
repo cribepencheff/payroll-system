@@ -2,7 +2,21 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+#employee-list li + li {
+  border-top: 1px solid #dedede;
+  margin-top: 1rem;
+  padding-top: 1rem;
+}
+
+#employee-list li > *:first-child {
+  margin-top: 0;
+}
+
 p.smallprint {
   font-size: 0.75rem;
   color: #656565;
+}
+
+.emphasize {
+  color: #6b18e7;
 }
